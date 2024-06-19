@@ -20,10 +20,12 @@ export default function CallBackUrl() {
   const [edit1, setEdit1] = useState(false);
   const [edit2, setEdit2] = useState(false);
   const [edit3, setEdit3] = useState(false);
+  const [edit4, setEdit4] = useState(false);
   const [url, setUrl] = useState('');
   const [url1, setUrl1] = useState('');
   const [url2, setUrl2] = useState('');
   const [url3, setUrl3] = useState('');
+  const [url4, setUrl4] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -95,6 +97,31 @@ export default function CallBackUrl() {
     }
   };
 
+  const Transferurl = () => {
+    if (!edit4) {
+      setEdit4(!edit4);
+    } else {
+      let token = localStorage.getItem('token');
+      let body = {
+        transferCallbackUrl: url4,
+      };
+      Api(`apiBox/dashboard/updateTransferCallbackUrl`, 'POST', body, token).then((Response: any) => {
+        console.log('======userProfileInfo==response=====>', Response);
+        if (Response.status == 200) {
+          if (Response.data.code == 200) {
+            enqueueSnackbar(Response.data.message);
+            setEdit4(!edit4);
+            getBBPSUurl();
+            console.log('======updateTransferCallbackUrl==code 200=====>', Response.data.data);
+          } else {
+            console.log('======updateTransferCallbackUrl=======>' + Response);
+          }
+        }
+      });
+    }
+  };
+
+
   const setRechagurl = () => {
     if (!edit2) {
       setEdit2(!edit2);
@@ -153,6 +180,7 @@ export default function CallBackUrl() {
           setUrl1(Response.data.data.partnerCallbackUrls.payout)
           setUrl2(Response.data.data.partnerCallbackUrls.recharge)
           setUrl3(Response.data.data.partnerCallbackUrls.aeps)
+          setUrl4(Response.data.data.partnerCallbackUrls.transfer)
           setIsLoading(false)
           console.log('======userProfileInfo==code 200=====>', Response.data.data);
         } else {
@@ -171,10 +199,10 @@ export default function CallBackUrl() {
       <Helmet>
         <title>CallBack URL | Tramo</title>
       </Helmet>
-      <Box sx={{ mt: 2, width: { xs: '100%', md: '50%' } }}>
+      <Box sx={{ mt:2, width: { xs: '100%', md: '50%' } }}>
         <Stack justifyContent={'space-between'}>
-          <Typography variant="h4">BBPS Callback URL</Typography>
-          <Stack flexDirection={'row'} gap={3} marginTop={3}>
+          <Typography variant="h5">BBPS Callback URL</Typography>
+          <Stack flexDirection={'row'} gap={3} marginTop={1}>
             <TextField
               label="url"
               placeholder="url"
@@ -191,10 +219,10 @@ export default function CallBackUrl() {
           </Stack>
         </Stack>
       </Box>
-      <Box sx={{ mt: 2, width: { xs: '100%', md: '50%' } }}>
+      <Box sx={{ mt:2, width: { xs: '100%', md: '50%' } }}>
         <Stack justifyContent={'space-between'}>
-          <Typography variant="h4">Money Transfer Callback URL</Typography>
-          <Stack flexDirection={'row'} gap={3} marginTop={3}>
+          <Typography variant="h5">Money Transfer Callback URL</Typography>
+          <Stack flexDirection={'row'} gap={3} marginTop={1}>
             <TextField
               label="Money Transfer url"
               placeholder=" Money Transfer url"
@@ -213,8 +241,8 @@ export default function CallBackUrl() {
       </Box>
       <Box sx={{ mt: 2, width: { xs: '100%', md: '50%' } }}>
         <Stack justifyContent={'space-between'}>
-          <Typography variant="h4">Recharge Callback URL</Typography>
-          <Stack flexDirection={'row'} gap={3} marginTop={3}>
+          <Typography variant="h5">Recharge Callback URL</Typography>
+          <Stack flexDirection={'row'} gap={3} marginTop={1}>
             <TextField
               label="Recharge url"
               placeholder="Recharge url"
@@ -233,8 +261,8 @@ export default function CallBackUrl() {
       </Box>
       <Box sx={{ mt: 2, width: { xs: '100%', md: '50%' } }}>
         <Stack justifyContent={'space-between'}>
-          <Typography variant="h4">AEPS Callback URL</Typography>
-          <Stack flexDirection={'row'} gap={3} marginTop={3}>
+          <Typography variant="h5">AEPS Callback URL</Typography>
+          <Stack flexDirection={'row'} gap={3} marginTop={1}>
             <TextField
               label="AEPS url"
               placeholder="AEPS url"
@@ -247,6 +275,26 @@ export default function CallBackUrl() {
             />
             <LoadingButton variant="contained" onClick={setAEPSurl}>
               {edit3 ? 'Save' : 'Edit'}
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </Box>
+      <Box sx={{ mt: 2, width: { xs: '100%', md: '50%' } }}>
+        <Stack justifyContent={'space-between'}>
+          <Typography variant="h5">Transfer Callback URL</Typography>
+          <Stack flexDirection={'row'} gap={3} marginTop={1}>
+            <TextField
+              label="Transfer url"
+              placeholder="Transfer url"
+              type="string"
+              value={url4}
+              size="small"
+              disabled={!edit4}
+              variant={edit4 ? 'outlined' : 'filled'}
+              onChange={(e) => setUrl4(e.target.value)}
+            />
+            <LoadingButton variant="contained" onClick={Transferurl}>
+              {edit4 ? 'Save' : 'Edit'}
             </LoadingButton>
           </Stack>
         </Stack>

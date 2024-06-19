@@ -49,7 +49,7 @@ function ApiCredential() {
     <>
       <Box sx={{ width: '100%' }}>
         <Box
-          sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px', fontSize: '20px' }}
+          sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '3px', fontSize: '20px' }}
         >
           <Tabs value={valueTabs} onChange={handleChangePanels} aria-label="basic tabs example">
             <Tab
